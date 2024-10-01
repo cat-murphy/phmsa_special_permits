@@ -4,7 +4,6 @@ output: html_notebook
 ---
 
 ```{r}
-# Load necessary libraries
 library(rvest)
 library(pdftools)
 library(dplyr)
@@ -35,7 +34,6 @@ full_permit_links <- paste0("https://www.phmsa.dot.gov/", permit_links)
 ```
 
 ```{r}
-# Create a data frame with permit numbers and their PDF links
 all_permits <- data.frame(
   permit_num = permit_numbers,
   pdf_link = full_permit_links
