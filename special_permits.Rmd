@@ -6,14 +6,10 @@ output: html_notebook
 ```{r}
 # Load necessary libraries
 library(rvest)
-library(dplyr)
-```
-
-```{r}
-# Load necessary libraries
-library(rvest)
 library(pdftools)
 library(dplyr)
+library(tidyverse)
+library(janitor)
 ```
 
 
@@ -54,5 +50,17 @@ all_permits |>
 ```{r}
 cleaned_permits <- all_permits |>
   distinct()
+```
+
+```{r}
+search_string <- "RAIL FREIGHT"
+
+search_in_pdf <- function(link, search_string) {
+    text <- pdf_text(link)
+    any(grepl(search_string, text, ignore.case = TRUE))
+}
+
+cleaned_permits <- cleaned_permits |>
+    mutate(found = sapply(pdf_link, search_in_pdf, search_string = search_string))
 ```
 
