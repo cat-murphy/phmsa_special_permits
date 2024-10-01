@@ -1,0 +1,58 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# Load necessary libraries
+library(rvest)
+library(dplyr)
+```
+
+```{r}
+# Load necessary libraries
+library(rvest)
+library(pdftools)
+library(dplyr)
+```
+
+
+```{r}
+file_path <- "special_permits_phmsa.html"
+page <- read_html(file_path)
+```
+
+```{r}
+permit_links <- page |>
+  html_nodes('a[href*="hazmat/documents/offer/"]') |>
+  html_attr('href')
+```
+
+```{r}
+permit_numbers <- page |>
+  html_nodes('a[href*="hazmat/documents/offer/"]') |>
+  html_text(trim = TRUE)
+```
+
+```{r}
+full_permit_links <- paste0("https://www.phmsa.dot.gov/", permit_links)
+```
+
+```{r}
+# Create a data frame with permit numbers and their PDF links
+all_permits <- data.frame(
+  permit_num = permit_numbers,
+  pdf_link = full_permit_links
+)
+```
+
+```{r}
+all_permits |>
+  get_dupes()
+```
+
+```{r}
+cleaned_permits <- all_permits |>
+  distinct()
+```
+
